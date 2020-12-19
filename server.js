@@ -24,32 +24,26 @@ app.get("/api/cheeses/", (req, res) => {
 
   let sql = `select * from cheeses `
 
-  if(taste !== undefined || strength !== undefined || hardness !== undefined || name !== undefined){
+  if(taste || strength || hardness || name ){
     sql += `where`  
 
-    if(taste === undefined){
-      sql += ` taste like '%'`      
-    }  else {
-      sql += ` taste = '${taste}'`
+    if(name){
+      sql +=` name like '%${name}%'`
+    }else{
+      sql +=` name like '%'`
+    }
+   
+    if(taste){
+      sql += ` and taste = '${taste}'`
     }
 
-    if(strength === undefined){
-      sql += ` and strength like '%'`
-    }  else {
+    if(strength){
       sql += ` and strength = '${strength}'`
     }
 
-    if(hardness === undefined){
-      sql += ` and hardness like '%'`
-    }  else {
+    if(hardness){
       sql += ` and hardness = '${hardness}'`
-    }
-
-    if(name === undefined){
-      sql += ` and name like '%'`
-    }  else {
-      sql += ` and name like '%${name}%'`
-    }
+    } 
   }
 
   db.all(sql, params, (err, rows) => {
